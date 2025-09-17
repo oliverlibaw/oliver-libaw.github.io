@@ -1,0 +1,241 @@
+---
+// src/components/Popup.astro
+---
+<div id="newsletter-popup" class="popup-overlay">
+  <div id="popup-content-wrapper" class="popup-content">
+    <div class="popup-image"></div>
+    <div class="popup-text-content">
+      <button id="popup-close" class="close-button">&times;</button>
+      <h2>Sign up for my newsletter!</h2>
+      <p>You have visited my personal website, which strongly indicates you would like very frequent updates from me piling up in your inbox. Choose which option works best for you:</p>
+ 
+      <div class="popup-options">
+        <div class="popup-option">
+          <h3>Daily Updates</h3>
+          <p>I'm dying to hear about what you had for breakfast.</p>
+        </div>
+        <div class="popup-option">
+          <h3>Hourly Updates</h3>
+          <p>My inbox has an unquenchable thirst for Oliver's opinions, profound witticisms, and carefully curated sponsored content.</p>
+        </div>
+        <div class="popup-option">
+          <h3>More, More, More</h3>
+          <p>Please just email me constantly. I don't care about what. AI-generated content? Yes, please. Just keep it coming.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<style>
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+ 
+  .popup-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+ 
+  .popup-content {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 16px;
+    max-width: 900px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    transform: scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    overflow: hidden;
+  }
+ 
+  .popup-image {
+    flex-basis: 40%;
+    background-image: url('/full-inbox.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+ 
+  .popup-text-content {
+    position: relative;
+    flex-basis: 60%;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #333;
+  }
+ 
+  .popup-overlay.visible .popup-content {
+    transform: scale(1);
+  }
+ 
+  .popup-content h2 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    color: #111;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+ 
+  .popup-content > p {
+    margin-bottom: 1.5rem;
+    color: #666;
+    line-height: 1.6;
+  }
+ 
+  .close-button {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    line-height: 1;
+    font-weight: 400;
+    color: #999;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+ 
+  .close-button:hover {
+    color: #333;
+  }
+ 
+  .popup-options {
+    margin-top: 1.5rem;
+    overflow-y: auto;
+    max-height: 320px;
+  }
+ 
+  .popup-option {
+    border: 1px solid #e0e0e0;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-align: left;
+  }
+ 
+  .popup-option:hover {
+    border-color: #999;
+    background-color: #f0f0f0;
+  }
+ 
+  .popup-option h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+ 
+  .popup-option p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #777;
+    line-height: 1.4;
+  }
+ 
+  #final-close-button {
+    margin-top: 1.5rem;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+ 
+  #final-close-button:hover {
+    background-color: #000;
+  }
+ 
+  @media (max-width: 768px) {
+    .popup-content {
+      flex-direction: column;
+      max-width: 400px;
+      width: 90%;
+    }
+ 
+    .popup-image {
+      flex-basis: 150px; /* Give it a fixed height */
+    }
+ 
+    .popup-text-content {
+      padding: 2rem;
+    }
+ 
+    .popup-content h2 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const popupOverlay = document.getElementById('newsletter-popup');
+    const contentWrapper = document.getElementById('popup-content-wrapper');
+    const textContentWrapper = contentWrapper.querySelector('.popup-text-content');
+    const options = document.querySelectorAll('.popup-option');
+    const closeButton = document.getElementById('popup-close');
+ 
+    // Show popup after 5 seconds
+    setTimeout(() => {
+      if (popupOverlay) {
+        popupOverlay.classList.add('visible');
+      }
+    }, 10000);
+ 
+    const closeModal = () => {
+      if (popupOverlay) {
+        popupOverlay.classList.remove('visible');
+      }
+    };
+ 
+    // Event listener for the initial close button
+    closeButton?.addEventListener('click', closeModal);
+ 
+    // Event listener for clicking outside the modal content
+    popupOverlay?.addEventListener('click', (event) => {
+      if (event.target === popupOverlay) {
+        closeModal();
+      }
+    });
+ 
+    // Event listener for the subscription options
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        if (textContentWrapper) {
+         
+          // Change content to "Thanks!"
+          textContentWrapper.innerHTML = `<h2 style="text-align: center; padding: 4rem 0;">Thanks!</h2>`;
+
+          // Close modal after a short delay
+          setTimeout(() => {
+            closeModal();
+          }, 1000); // 1 second delay  
+
+
+        }
+      });
+    });
+  });
+</script>

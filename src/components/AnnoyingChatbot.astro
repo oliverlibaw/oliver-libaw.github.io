@@ -1,0 +1,149 @@
+---
+// src/components/AnnoyingChatbot.astro
+---
+<div id="annoying-chatbot-popup" class="chatbot-container">
+  <div id="annoying-chatbot-content" class="chatbot-content">
+    <!-- Content will be injected by script -->
+  </div>
+</div>
+
+<template id="annoying-chatbot-step1">
+  <button class="close-button" data-step="1">&times;</button>
+  <p class="chatbot-message">I'm pretty sure you want to ask a question.</p>
+  <div class="chatbot-options">
+    <button class="chatbot-button" data-step="1">No, I'm good</button>
+    <button class="chatbot-button" data-step="1">You're creeping me out</button>
+  </div>
+</template>
+
+<template id="annoying-chatbot-step2">
+  <button class="close-button" data-step="2">&times;</button>
+  <p class="chatbot-message">I'm sad that you don't want to chat.</p>
+  <div class="chatbot-options">
+    <button class="chatbot-button" data-step="2">Go away forever</button>
+    <button class="chatbot-button" data-step="2">Maybe later. It's been a long week and it might be nice to talk through it</button>
+  </div>
+</template>
+
+<style>
+  /* Styles are copied from ChatbotPopup.astro for consistency */
+  .chatbot-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 1003; /* Higher than the other popups */
+    max-width: 350px;
+    width: calc(100% - 4rem);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .chatbot-container.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .chatbot-content {
+    background-color: #f1f1f1;
+    color: #111;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    position: relative;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 1.5rem;
+    color: #aaa;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .close-button:hover {
+    color: #333;
+  }
+
+  .chatbot-message {
+    margin: 0 0 1.5rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .chatbot-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .chatbot-button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #007bff;
+    padding: 0.75rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, border-color 0.2s;
+    width: 100%;
+  }
+
+  .chatbot-button:hover {
+    background-color: #e9f5ff;
+    border-color: #007bff;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('annoying-chatbot-popup');
+    const content = document.getElementById('annoying-chatbot-content');
+
+    const template1 = document.getElementById('annoying-chatbot-step1');
+    const template2 = document.getElementById('annoying-chatbot-step2');
+
+    if (!popup || !content || !template1 || !template2) return;
+    const showFirstPopup = () => {
+      content.innerHTML = '';
+      content.appendChild(template1.content.cloneNode(true));
+      popup.classList.add('visible');
+      addEventListeners(1);
+    };
+
+    const showSecondPopup = () => {
+      content.innerHTML = '';
+      content.appendChild(template2.content.cloneNode(true));
+      popup.classList.add('visible');
+      addEventListeners(2);
+    };
+
+    const dismiss = () => {
+      popup.classList.remove('visible');
+    };
+
+
+    const addEventListeners = (step) => {
+      const buttons = popup.querySelectorAll(`[data-step="${step}"]`);
+      if (step === 1) {
+        buttons.forEach(button => button.addEventListener('click', () => {
+          dismiss();
+          setTimeout(showSecondPopup, 30000); // 30 seconds later
+        }, { once: true }));
+      } else if (step === 2) {
+        buttons.forEach(button => button.addEventListener('click', dismiss, { once: true }));
+      }
+    };
+
+    // The first chatbot appears after 13s. This one appears 30s after that.
+    setTimeout(showFirstPopup, 13000 + 30000);
+  });
+</script>

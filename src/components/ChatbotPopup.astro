@@ -1,0 +1,108 @@
+---
+// src/components/ChatbotPopup.astro
+---
+<div id="chatbot-popup" class="chatbot-container">
+  <div class="chatbot-content">
+    <button id="chatbot-close" class="close-button">&times;</button>
+    <p class="chatbot-message">Let me know if you have any questions!</p>
+    <div class="chatbot-options">
+      <button class="chatbot-button">I'd rather die than use your AI chatbot</button>
+      <button class="chatbot-button">The existence of this popup window repulses me</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .chatbot-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 1002;
+    max-width: 350px;
+    width: calc(100% - 4rem);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .chatbot-container.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .chatbot-content {
+    background-color: #f1f1f1;
+    color: #111;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    position: relative;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 1.5rem;
+    color: #aaa;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .close-button:hover {
+    color: #333;
+  }
+
+  .chatbot-message {
+    margin: 0 0 1.5rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .chatbot-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .chatbot-button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #007bff;
+    padding: 0.75rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, border-color 0.2s;
+    width: 100%;
+  }
+
+  .chatbot-button:hover {
+    background-color: #e9f5ff;
+    border-color: #007bff;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const chatbotPopup = document.getElementById('chatbot-popup');
+    if (!chatbotPopup) return;
+
+    setTimeout(() => {
+      chatbotPopup.classList.add('visible');
+    }, 16000);
+
+    const closePopup = () => {
+      chatbotPopup.classList.remove('visible');
+    };
+
+    const buttons = chatbotPopup.querySelectorAll('.chatbot-button, #chatbot-close');
+    buttons.forEach(button => button.addEventListener('click', closePopup));
+  });
+</script>

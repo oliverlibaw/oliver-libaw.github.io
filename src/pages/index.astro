@@ -1,16 +1,291 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Oliver Libaw">
+	<style>
+		body {
+			margin: 0;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+				'Helvetica Neue', Arial, sans-serif;
+			background-color: #000;
+			color: white;
+			overflow-x: hidden; 
+		}
+
+		.video-background {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			width: 100vw;
+			height: 56.25vw; /* 16:9 aspect ratio */
+			min-width: 100%;
+			min-height: 100%;
+			transform: translate(-50%, -50%);
+			z-index: -2; 
+		}
+
+		.video-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #000;
+			opacity: 0;
+			z-index: -1;
+			transition: opacity 0.3s ease;
+		}
+
+		.video-background iframe {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.hero {
+			height: 100vh;
+			position: relative;
+		}
+
+		.top-bar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1rem 4rem;
+			transition: background-color 0.3s ease;
+			background-color: transparent;
+			z-index: 10;
+			box-sizing: border-box;
+		}
+
+		.top-bar.scrolled {
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+
+		.top-left {
+			text-align: left;
+		}
+
+		.top-right {
+			text-align: right;
+		}
+
+		h1 {
+			font-size: clamp(2.5rem, 8vw, 4rem);
+			margin: 0;
+			font-weight: 500;
+		}
+
+		.subtitle {
+			font-size: clamp(1.2rem, 4vw, 1.5rem);
+			margin: 0.5rem 0 1.5rem;
+			font-weight: 300;
+		}
+
+		.top-right a {
+			color: white;
+			text-decoration: none;
+			margin-left: 2rem;
+			font-size: clamp(1rem, 3vw, 1.2rem);
+			transition: opacity 0.3s ease;
+		}
+
+		.top-right a:hover {
+			opacity: 0.7;
+		}
+
+		.pullquote {
+			position: absolute;
+			padding: 4rem;
+			left: 0;
+			max-width: 37ch;
+			font-size: clamp(1.5rem, 2.5vw, 2rem);
+			line-height: 1.5;
+			text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+			font-family: Baskerville, "Goudy Old Style", "Palatino", "Book Antiqua", serif;
+			bottom: 20px;
+		}
+
+		.pullquote blockquote {
+			margin: 0;
+			font-style: italic;
+		}
+
+		.pullquote cite {
+			display: block;
+			font-style: normal;
+			font-size: 0.9rem;
+			margin-top: 0.5rem;
+			opacity: 0.8;
+		}
+
+		.details-section {
+			background-color: #000;
+			color: white;
+			padding: 8rem 4rem;
+			position: relative;
+			z-index: 5;
+		}
+
+		.details-grid {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 5rem;
+			max-width: 1400px;
+			margin: 0 auto;
+		}
+
+		@media (min-width: 768px) {
+			.details-grid {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			.column:last-child:nth-child(odd) {
+				grid-column: 1 / -1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.column:last-child:nth-child(odd) h2,
+			.column:last-child:nth-child(odd) p {
+				text-align: center;
+			}			
+		}
+
+		.column {
+			text-align: center;
+		}
+
+		.column-image {
+			width: 250px;
+			height: 250px;
+			border-radius: 50%;
+			object-fit: cover;
+			margin-bottom: 2rem;
+		}
+
+		.column h2 {
+			font-size: 1.5rem;
+			font-weight: 500;
+			margin-top: 0;
+			margin-bottom: 1.5rem;
+			border-bottom: 1px solid rgba(255,255,255,0.2);
+			padding-bottom: 0.75rem;
+			text-align: left;
+		}
+
+		.column p {
+			font-size: 1rem;
+			line-height: 1.7;
+			font-weight: 300;
+			opacity: 0.9;
+			margin: 0 0 1em;
+			max-width: 70ch;
+			text-align: left;
+		}
+
+	</style>
+	<div class="hero">
+		<div class="video-background">
+			<div class="video-overlay" id="video-overlay"></div>
+
+			<iframe
+				src="https://player.vimeo.com/video/836697875?h=8c8e024462&autoplay=1&loop=1&muted=1&background=1"
+				frameborder="0"
+				allow="autoplay; fullscreen; picture-in-picture"
+				allowfullscreen
+				title="Background video of abstract shapes"></iframe>
+		</div>
+	<header class="top-bar">
+			<div class="top-left">
+				<h1>Oliver Libaw</h1>
+				<p class="subtitle">doer of several things</p>
+			</div>
+			<nav class="top-right">
+				<a
+					href="https://github.com/oliverlibaw"
+					target="_blank"
+					rel="noopener noreferrer">github</a
+				>
+				<a
+					href="https://www.linkedin.com/in/oliver-libaw/"
+					target="_blank"
+					rel="noopener noreferrer">linkedin</a
+				>
+				<a href="mailto:oliver@oliverlibaw.com">email</a>
+			</nav>
+		</header>
+		<div class="pullquote">
+			<blockquote>"If you need someone with great editorial leadership skills and hands-on experience building and training AI models, Oliver may be the person for you."</blockquote>
+			<cite>Me, talking about myself</cite>
+		</div>
+	</div>
+	<section class="details-section">
+		<div class="details-grid">
+			<div class="column">
+				<img src="/furiosa_rngd_cards.avif" alt="FuriosaAI promotional cards" class="column-image" />
+				<h2>Global PR and Editorial at FuriosaAI</h2>
+				<p>In my current role as Global Lead for PR and Corporate Communications, I oversee global PR efforts, strategic messaging and thought leadership, and also lead content for major announcements. Reporting directly to the CEO of this 180-person startup, I am responsible for explaining Furiosa's technology to both expert and nonexpert audiences and showing why Furiosa is an exciting, important player in AI.</p>
+				<p>Furiosa is a semiconductor startup making high-performance, energy-efficient AI chips. In 2025 it became the first Korean tech "unicorn."</p>
+				<p>My work for Furiosa has led to coverage by Bloomberg, Reuters, TechCrunch, EE Times, and many other media outlets.</p>
+			</div>
+			<div class="column">
+				<img src="/dino_image.webp" alt="Dinosaur illustration" class="column-image" />
+				<h2>Launched and Managed the Meta AI Blog</h2>
+				<p>During my five years at Meta/Facebook, I oversaw the Meta AI blog, aimed at an expert audience of researchers, engineers, tech reporters, and policy makers. It aims to explain what Meta AI is building, why it’s noteworthy, and what impact it'll have. </p>
+				<p>Under my direction, we announced Meta AI’s first Llama large language model and Make-A-Scene generative AI work, among many other projects. </p>
+				<p>In this role I worked closely with a broad cross-functional team including legal, policy, PR, research, and senior leadership (Chief AI Scientist Yann LeCun, Meta/Facebook Chief Technology Officer Mike Schroepfer, and VP of AI research Joelle Pineau).</p>
+			</div>
+			<div class="column">
+				<img src="/mexico_city_times.webp" alt="Mexico City Times newspaper" class="column-image" />
+				<h2>20 Years of Media and Journalism Experience</h2>
+				<p>Before joining Facebook/Meta, I oversaw a general-audience lifestyle channel at Yahoo, where I grew monthly unique users from 3 to 9 million. </p>
+				<p>Prior to working at Yahoo, I was a reporter and editor for the ABC News website, among other roles in media and journalism. </p>
+				<p>I have Master’s degree in philosophy from Cambridge University and a Bachelor’s degree from Pomona College.</p>
+			</div>
+			<div class="column">
+				<img src="/code_example.webp" alt="Example of code" class="column-image" />
+				<h2>Hands-On Experience With Machine Learning</h2>
+				<p>I've completed several courses in machine learning, including Andrew Ng's Coursera/DeepLearning.AI specialization. </p>
+				<p>As part of these courses I've built various and trained various models for computer vision and natural language processing tasks. I've used common machine learning frameworks such as PyTorch and TensorFlow and I've developed a solid grounding in Python.</p>
+			</div>
+	
+			<div class="column">
+				<img src="/cozmos-wall.jpeg" alt="Example of code" class="column-image" />
+			 	<h2>AI-Powered Artwork at COZMOS Gallery in NYC</h2>
+				<p>I'm pleased to have an AI art project on display at COZMOS Gallery on NYC's Lower East Side.</p>
+				<p>There's a lottttt of AI-generated art these days. This project tries to take a different tack: Instead of generating an image from a prompt, the AI invents the context for a (really uninteresting) real-world object.</p>
+				<p>The project uses a language model, a Raspberry Pi-powered display and a piece of silver duct tape. </p>
+				<p>The language model invented ~200 museum-style descriptions of a made-up artwork (the duct tape stuck to a wall) and those descriptions cycle through the Raspberry Pi display. The LLM's descriptions (IMO) are interesting, mostly fairly plausible (the Claude Monet one excepted), and kind of unsettling.</p>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		document.addEventListener('scroll', () => {
+			const overlay = document.getElementById('video-overlay');
+if (overlay) {
+				const heroHeight = window.innerHeight;
+				const scrollPosition = window.scrollY;
+				const fadeStart = heroHeight * 0.25;
+				const fadeEnd = heroHeight * 0.75;
+				const opacity = Math.max(0, Math.min(1, (scrollPosition - fadeStart) / (fadeEnd - fadeStart)));
+				overlay.style.opacity = opacity.toString();
+			}
+
+			// Top bar background
+			const topBar = document.querySelector('.top-bar');
+			if (topBar) {
+				if (window.scrollY > 10) {
+					topBar.classList.add('scrolled');
+				} else {
+					topBar.classList.remove('scrolled');
+				}
+			}			
+		});
+	</script>
+	
+</Layout>

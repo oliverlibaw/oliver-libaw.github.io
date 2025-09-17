@@ -1,0 +1,111 @@
+---
+// src/components/GdprPopup.astro
+---
+<div id="gdpr-popup" class="gdpr-banner">
+  <div class="gdpr-content">
+    <div class="gdpr-text">
+      <h4>Cookies on OliverLibaw.com</h4>
+      <p>This site does not collect cookies or use similar technologies. It's a very basic website. Nothing is personalized. There are no ads. And, no offense, but I don't really care enough about tracking you.</p>
+      <p>You cannot find out more about my <u>privacy policy</u> and <u>cookie policy</u>, because I don't have either. (Even though I underlined the words to make them look like links.) If you want to manage your cookie choices, go to some other website.</p>
+      </div>
+    <div class="gdpr-buttons">
+      <button class="gdpr-button">ACCEPT</button>
+      <button class="gdpr-button">I SAID 'ACCEPT'</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gdpr-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #052962;
+    color: #ffffff;
+    padding: 1.5rem 2rem;
+    z-index: 1001;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    display: none; /* Hidden by default */
+    line-height: 1.5;
+    transition: opacity 0.3s ease-out;
+  }
+ 
+  .gdpr-banner.hiding {
+    opacity: 0;
+    pointer-events: none;
+  }
+ 
+  .gdpr-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+ 
+  .gdpr-text {
+    flex-grow: 1;
+    max-width: 70ch;
+  }
+ 
+  .gdpr-text h4 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+  }
+ 
+  .gdpr-text p {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+  }
+ 
+  .gdpr-text u {
+    text-decoration: underline;
+    cursor: default;
+  }
+  .gdpr-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0;
+    align-items: center;
+  }
+ 
+  .gdpr-button {
+    background-color: #ffab00;
+    color: #052962;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+  }
+ 
+  .gdpr-button:hover {
+    background-color: #ffd700;
+  }
+</style>
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const gdprPopup = document.getElementById('gdpr-popup');
+    if (!gdprPopup) return;
+
+    gdprPopup.style.display = 'block';
+    const buttons = gdprPopup.querySelectorAll('.gdpr-button');
+ 
+    const closePopup = () => {
+      gdprPopup.classList.add('hiding');
+    };
+ 
+    buttons.forEach(button => button.addEventListener('click', closePopup));
+  });
+</script>
+
