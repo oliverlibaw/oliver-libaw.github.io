@@ -1,12 +1,15 @@
 ---
 import GdprPopup from '../components/GdprPopup.astro';
 import Popup from '../components/Popup.astro';
-import AnnoyingChatbot from '../components/AnnoyingChatbot.astro';
 import SurveyPopup from '../components/SurveyPopup.astro';
+import ChatbotStep1 from '../components/ChatbotStep1.astro';
+import ChatbotStep2 from '../components/ChatbotStep2.astro';
 import SpinWheelPopup from '../components/SpinWheelPopup.astro';
 import DownloadAppPopup from '../components/DownloadAppPopup.astro';
 import QrCodePopup from '../components/QrCodePopup.astro';
 import FollowSocialPopup from '../components/FollowSocialPopup.astro';
+import ImagePopup from '../components/ImagePopup.astro';
+import BannerPopup from '../components/BannerPopup.astro';
 
 
 export interface Props {
@@ -30,13 +33,177 @@ const { title, showPopups = false } = Astro.props;
 			<>
 				<GdprPopup />
 				<Popup />
-				<AnnoyingChatbot />
 				<SurveyPopup />
+				<ChatbotStep1 />
+				<ChatbotStep2 />
 				<SpinWheelPopup />
 				<DownloadAppPopup />
 				<QrCodePopup />
 				<FollowSocialPopup />
+				<ImagePopup />
+				<BannerPopup />
 			</>
 		)}
 	</body>
 </html>
+<script define:vars={{ showPopups }}>
+	document.addEventListener('DOMContentLoaded', () => {
+		if (!showPopups) return;
+
+		const popups = {
+			'gdpr': {
+				element: document.getElementById('gdpr-popup'),
+				show: (el) => { el.style.display = 'block'; el.classList.remove('hiding'); },
+				hide: (el) => el.classList.add('hiding'),
+				closeSelectors: '.gdpr-button',
+				duration: 300,
+			},
+			'newsletter': {
+				element: document.getElementById('newsletter-popup'),
+				show: (el) => el.classList.add('visible'),
+				hide: (el) => el.classList.remove('visible'),
+				closeSelectors: '#popup-close, .popup-option',
+				duration: 400,
+				setup: (el, handler) => el.addEventListener('click', (e) => { if (e.target === el) handler(); }),
+			},
+			'chatbot-step1': {
+				element: document.getElementById('chatbot-step1-popup'),
+				show: (el) => el.classList.add('visible'),
+				hide: (el) => el.classList.remove('visible'),
+				closeSelectors: '.close-button, .option-button',
+				duration: 500,
+			},
+			'survey': {
+				element: document.getElementById('survey-popup-overlay'),
+				show: (el) => el.classList.add('active'),
+				hide: (el) => el.classList.remove('active'),
+				closeSelectors: '#close-survey-popup',
+				duration: 300,
+				setup: (el, handler) => {
+					el.addEventListener('click', (e) => { if (e.target === el) handler(); });
+					el.querySelector('form')?.addEventListener('change', (e) => { if (e.target.type === 'radio') handler(); });
+				},
+			},
+			'download-app': {
+				element: document.getElementById('download-app-popup'),
+				show: (el) => el.classList.add('visible'),
+				hide: (el) => el.classList.remove('visible'),
+				closeSelectors: '#download-app-close',
+				duration: 500,
+				setup: (el, handler) => {
+					el.querySelectorAll('.store-button').forEach(btn => btn.addEventListener('click', (e) => {
+						e.preventDefault();
+						handler();
+					}));
+				},
+			},
+			'spin-wheel': {
+				element: document.getElementById('spin-wheel-popup'),
+				show: (el) => {
+					el.classList.add('visible');
+					const video = el.querySelector('video');
+					if (video) {
+						video.currentTime = 0;
+						video.play();
+					}
+				},
+				hide: (el) => el.classList.remove('visible'),
+				duration: 300,
+				setup: (el, handler) => {
+					const video = el.querySelector('video');
+					if (video) {
+						// Once video ends, automatically close the popup.
+						video.addEventListener('ended', handler, { once: true });
+					} else {
+						// Fallback: if no video, allow closing immediately.
+						el.addEventListener('click', handler, { once: true });
+					}
+				},
+			},
+			'chatbot-step2': {
+				element: document.getElementById('chatbot-step2-popup'),
+				show: (el) => el.classList.add('visible'),
+				hide: (el) => el.classList.remove('visible'),
+				closeSelectors: 'button',
+				duration: 500,
+			},
+			'banner-popup': {
+				element: document.getElementById('banner-popup'),
+				show: (el) => el.classList.add('visible'),
+				hide: (el) => el.classList.remove('visible'),
+				closeSelectors: '#banner-close, .subscribe-button',
+				duration: 400,
+			},
+			'follow-social': {
+				element: document.getElementById('follow-social-popup'),
+				show: (el) => el.classList.add('visible'),
+				hide: (el) => el.classList.remove('visible'),
+				closeSelectors: '.popup-content',
+				duration: 300,
+			},
+			'image-popup': {
+				element: document.getElementById('image-popup'),
+				show: (el) => el.classList.add('visible'),
+				hide: (el) => el.classList.remove('visible'),
+				closeSelectors: '#image-popup-close',
+				duration: 300,
+			},
+			'qr-code': {
+				element: document.getElementById('qr-code-popup'),
+				show: (el) => el.classList.add('visible'),
+				hide: (el) => el.classList.remove('visible'),
+				closeSelectors: '#qr-code-close',
+				duration: 300,
+			},
+		};
+
+		const popupSequence = ['gdpr', 'newsletter', 'chatbot-step1', 'survey', 'download-app', 'spin-wheel', 'chatbot-step2', 'banner-popup', 'follow-social', 'image-popup', 'qr-code'];
+		let currentIndex = 0;
+		let isPopupSequenceActive = false;
+
+		function showNextPopup() {
+			if (currentIndex >= popupSequence.length) {
+				console.log('All popups shown, restarting sequence.');
+				currentIndex = 0;
+			}
+
+			const key = popupSequence[currentIndex];
+			const config = popups[key];
+
+			if (!config || !config.element) {
+				console.error(`Popup config or element not found for: ${key}`);
+				currentIndex++;
+				showNextPopup();
+				return;
+			}
+
+			const closeHandler = () => {
+				config.hide(config.element);
+				setTimeout(() => {
+					isPopupSequenceActive = false;
+					currentIndex++;
+					showNextPopup();
+				}, config.duration + 1000);
+			};
+
+			if (config.closeSelectors) {
+				config.element.querySelectorAll(config.closeSelectors).forEach(trigger => {
+					trigger.addEventListener('click', closeHandler, { once: true });
+				});
+			}
+
+			if (config.setup) {
+				config.setup(config.element, closeHandler);
+			}
+
+			config.show(config.element);
+		}
+
+		const enshittifyButton = document.getElementById('enshittify-button');
+		enshittifyButton?.addEventListener('click', () => {
+			if (isPopupSequenceActive) return;
+			isPopupSequenceActive = true;
+			showNextPopup();
+		}, { once: true });
+	});
+</script>

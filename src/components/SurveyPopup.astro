@@ -12,7 +12,7 @@ const ratingScale = Array.from({ length: 10 }, (_, i) => i + 1);
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 1010;
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -96,6 +96,25 @@ const ratingScale = Array.from({ length: 10 }, (_, i) => i + 1);
     .close-button:hover {
         color: #fff;
     }
+
+    @media (max-width: 768px) {
+        .survey-popup {
+            padding: 1.5rem;
+        }
+        .rating-scale {
+            gap: 0.25rem;
+            justify-content: center;
+            flex-wrap: nowrap;
+        }
+        .rating-scale input[type="radio"] {
+            width: 20px;
+            height: 20px;
+        }
+        .rating-scale div {
+            font-size: 0.8rem;
+            padding: 0 0.1rem;
+        }
+    }
 </style>
 
 <div class="survey-overlay" id="survey-popup-overlay">
@@ -116,32 +135,3 @@ const ratingScale = Array.from({ length: 10 }, (_, i) => i + 1);
         </form>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const overlay = document.getElementById('survey-popup-overlay');
-        const surveyPopup = document.querySelector('.survey-popup');
-        const closeButton = document.getElementById('close-survey-popup');
-
-        if (!overlay || !closeButton) return;
-
-        const showPopup = () => {
-            overlay.classList.add('active');
-        };
-
-        const closePopup = () => {
-            overlay.classList.remove('active');
-            document.dispatchEvent(new CustomEvent('survey-closed'));
-        };
-
-        document.addEventListener('show-survey', showPopup);
-        closeButton.addEventListener('click', closePopup);
-        overlay.addEventListener('click', (event) => {
-            if (event.target === overlay) {
-                closePopup();
-            }
-        });
-
-        surveyPopup?.addEventListener('click', closePopup);
-    });
-</script>

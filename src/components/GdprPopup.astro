@@ -23,7 +23,7 @@
     background-color: #052962;
     color: #ffffff;
     padding: 1.5rem 2rem;
-    z-index: 1001;
+    z-index: 1009;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 15px;
     display: none; /* Hidden by default */
@@ -91,25 +91,3 @@
     background-color: #ffd700;
   }
 </style>
- 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const gdprPopup = document.getElementById('gdpr-popup');
-    if (!gdprPopup) return;
-
-    const showPopup = () => {
-      gdprPopup.classList.remove('hiding');
-      gdprPopup.style.display = 'block';
-    };
-
-    const buttons = gdprPopup.querySelectorAll('.gdpr-button');
- 
-    const closePopup = () => {
-      gdprPopup.classList.add('hiding');
-      document.dispatchEvent(new CustomEvent('gdpr-closed'));
-    };
- 
-    buttons.forEach(button => button.addEventListener('click', closePopup));
-    document.addEventListener('show-gdpr', showPopup);
-  });
-</script>

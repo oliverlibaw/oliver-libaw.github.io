@@ -2,20 +2,10 @@
 ---
 <div id="spin-wheel-popup" class="popup-overlay">
   <div class="popup-content">
-    <button id="spin-wheel-close" class="close-button">&times;</button>
-    <div class="wheel-container">
-      <img src="/images/spin_the_wheel.png" alt="Spin the wheel" class="wheel-image" />
-    </div>
-    <div class="form-container">
-      <h2>Subscribe, Spin, Save!</h2>
-      <p>Save on what? Who cares! Just do it!</p>
-      <form id="spin-wheel-form">
-        <input type="text" placeholder="Name" required />
-        <input type="tel" placeholder="Phone Number" required />
-        <input type="text" placeholder="SSN" required />
-        <button type="submit" class="submit-button">SPIN THE WHEEL!</button>
-      </form>
-    </div>
+    <video 
+      src="/images/spinner.mp4" 
+      autoplay muted playsinline class="spinner-video" 
+      title="Spinning wheel animation"></video>
   </div>
 </div>
 
@@ -30,7 +20,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1004;
+    z-index: 1010;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     opacity: 0;
     visibility: hidden;
@@ -43,117 +33,23 @@
   }
 
   .popup-content {
-    display: flex;
-    background: #1e1e1e;
-    color: #fff;
-    border-radius: 15px;
-    max-width: 800px;
-    width: 90%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    background: transparent;
+    box-shadow: none;
     position: relative;
-    overflow: hidden;
+    max-width: 400px;
+    width: 90%;
   }
 
   @media (max-width: 768px) {
     .popup-content {
-      flex-direction: column;
-      max-width: 350px;
-      width: 90%;
+      max-width: 300px;
     }
   }
 
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 2rem;
-    color: #888;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 2;
-  }
-
-  .wheel-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    background: linear-gradient(45deg, #3a1c71, #d76d77, #ffaf7b);
-    padding: 2rem;
-  }
-  
-  .wheel-image {
-    max-width: 300px;
+  .spinner-video {
     width: 100%;
     height: auto;
-  }
-
-  .form-container {
-    flex: 1;
-    padding: 2rem 3rem;
-    text-align: center;
-  }
-
-  .form-container h2 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .form-container p {
-    margin-bottom: 1.5rem;
-    color: #ccc;
-  }
-
-  #spin-wheel-form input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 1rem;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background: #333;
-    color: #fff;
-    font-size: 1rem;
-  }
-
-  .submit-button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 5px;
-    background: #e67e22;
-    color: #fff;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .submit-button:hover {
-    background: #d35400;
+    display: block;
+    border-radius: 8px; /* Optional: adds slightly rounded corners */
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const popup = document.getElementById('spin-wheel-popup');
-    const closeButton = document.getElementById('spin-wheel-close');
-    const form = document.getElementById('spin-wheel-form');
-    const formElements = form.querySelectorAll('input, button');
-
-    if (!popup || !closeButton || !form || !formElements) return;
-
-    const showPopup = () => popup.classList.add('visible');
-
-    const closePopup = () => {
-      popup.classList.remove('visible');
-      document.dispatchEvent(new CustomEvent('spin-wheel-closed'));
-    };
-
-    document.addEventListener('show-spin-wheel', showPopup);
-    closeButton.addEventListener('click', closePopup);
-    
-    formElements.forEach(el => el.addEventListener('click', closePopup));
-  });
-</script>

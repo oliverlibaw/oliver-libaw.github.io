@@ -3,7 +3,7 @@
 <div id="qr-code-popup" class="popup-overlay">
   <div class="popup-content">
     <button id="qr-code-close" class="close-button">&times;</button>
-    <h2>It's QR Code Time</h2>
+    <h2>It's QR Code Time.</h2>
     <img src="/images/sample_qr_code.png" alt="Sample QR Code" />
   </div>
 </div>
@@ -19,7 +19,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1006;
+    z-index: 1010;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     opacity: 0;
     visibility: hidden;
@@ -62,21 +62,3 @@
     cursor: pointer;
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const popup = document.getElementById('qr-code-popup');
-    const closeButton = document.getElementById('qr-code-close');
-
-    if (!popup || !closeButton) return;
-
-    const showPopup = () => popup.classList.add('visible');
-    const closePopup = () => {
-      popup.classList.remove('visible');
-      document.dispatchEvent(new CustomEvent('qr-code-closed'));
-    };
-
-    document.addEventListener('show-qr-code', showPopup);
-    closeButton.addEventListener('click', closePopup);
-  });
-</script>

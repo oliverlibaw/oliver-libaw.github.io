@@ -16,9 +16,8 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
     display: flex;
-    justify-content: center;
     align-items: center;
-    z-index: 1007;
+    z-index: 1010;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     opacity: 0;
     visibility: hidden;
@@ -60,21 +59,3 @@
     z-index: 1;
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const popup = document.getElementById('follow-social-popup');
-    const closeButton = document.getElementById('follow-social-close');
-
-    if (!popup || !closeButton) return;
-
-    const showPopup = () => popup.classList.add('visible');
-    const closePopup = () => {
-      popup.classList.remove('visible');
-      document.dispatchEvent(new CustomEvent('follow-social-closed'));
-    };
-
-    document.addEventListener('show-follow-social', showPopup);
-    closeButton.addEventListener('click', closePopup);
-  });
-</script>
