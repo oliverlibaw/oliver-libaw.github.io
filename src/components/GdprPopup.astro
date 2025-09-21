@@ -1,5 +1,4 @@
 ---
-// src/components/GdprPopup.astro
 ---
 <div id="gdpr-popup" class="gdpr-banner">
   <div class="gdpr-content">
@@ -98,14 +97,19 @@
     const gdprPopup = document.getElementById('gdpr-popup');
     if (!gdprPopup) return;
 
-    gdprPopup.style.display = 'block';
+    const showPopup = () => {
+      gdprPopup.classList.remove('hiding');
+      gdprPopup.style.display = 'block';
+    };
+
     const buttons = gdprPopup.querySelectorAll('.gdpr-button');
  
     const closePopup = () => {
       gdprPopup.classList.add('hiding');
+      document.dispatchEvent(new CustomEvent('gdpr-closed'));
     };
  
     buttons.forEach(button => button.addEventListener('click', closePopup));
+    document.addEventListener('show-gdpr', showPopup);
   });
 </script>
-

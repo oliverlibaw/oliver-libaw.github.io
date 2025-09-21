@@ -1,9 +1,10 @@
 ---
-// src/components/Popup.astro
 ---
 <div id="newsletter-popup" class="popup-overlay">
   <div id="popup-content-wrapper" class="popup-content">
-    <div class="popup-image"></div>
+    <div class="popup-image">
+      <img src="/full-inbox.jpg" alt="An overflowing email inbox" />
+    </div>
     <div class="popup-text-content">
       <button id="popup-close" class="close-button">&times;</button>
       <h2>Sign up for my newsletter!</h2>
@@ -54,19 +55,25 @@
     display: flex;
     background-color: #ffffff;
     border-radius: 16px;
-    max-width: 900px;
+    max-width: 750px;
     width: 90%;
     box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     transform: scale(0.95);
     transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     overflow: hidden;
+    margin-left: 20vw;
   }
  
   .popup-image {
-    flex-basis: 40%;
-    background-image: url('/full-inbox.jpg');
-    background-size: cover;
-    background-position: center;
+    flex-basis: 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .popup-image img {
+    width: 100%;
+    height: auto;
   }
  
   .popup-text-content {
@@ -117,8 +124,6 @@
  
   .popup-options {
     margin-top: 1.5rem;
-    overflow-y: auto;
-    max-height: 320px;
   }
  
   .popup-option {
@@ -151,40 +156,20 @@
     line-height: 1.4;
   }
  
-  #final-close-button {
-    margin-top: 1.5rem;
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    background-color: #333;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
- 
-  #final-close-button:hover {
-    background-color: #000;
-  }
- 
   @media (max-width: 768px) {
     .popup-content {
       flex-direction: column;
       max-width: 400px;
+      margin-left: 0;
       width: 90%;
     }
  
     .popup-image {
-      flex-basis: 150px; /* Give it a fixed height */
+      flex-basis: 150px;
     }
  
     .popup-text-content {
       padding: 2rem;
-    }
- 
-    .popup-content h2 {
-      font-size: 1.5rem;
     }
   }
 </style>
@@ -193,48 +178,28 @@
   document.addEventListener('DOMContentLoaded', () => {
     const popupOverlay = document.getElementById('newsletter-popup');
     const contentWrapper = document.getElementById('popup-content-wrapper');
-    const textContentWrapper = contentWrapper.querySelector('.popup-text-content');
+    const textContentWrapper = contentWrapper?.querySelector('.popup-text-content');
     const options = document.querySelectorAll('.popup-option');
     const closeButton = document.getElementById('popup-close');
- 
-    // Show popup after 5 seconds
-    setTimeout(() => {
-      if (popupOverlay) {
-        popupOverlay.classList.add('visible');
-      }
-    }, 10000);
- 
+
+    if (!popupOverlay) return;
+
+    const showPopup = () => popupOverlay.classList.add('visible');
+
     const closeModal = () => {
-      if (popupOverlay) {
-        popupOverlay.classList.remove('visible');
-      }
+      popupOverlay.classList.remove('visible');
+      document.dispatchEvent(new CustomEvent('newsletter-closed'));
     };
- 
-    // Event listener for the initial close button
+
+    document.addEventListener('show-newsletter', showPopup);
     closeButton?.addEventListener('click', closeModal);
- 
-    // Event listener for clicking outside the modal content
-    popupOverlay?.addEventListener('click', (event) => {
-      if (event.target === popupOverlay) {
-        closeModal();
-      }
+    popupOverlay.addEventListener('click', (event) => {
+      if (event.target === popupOverlay) closeModal();
     });
- 
-    // Event listener for the subscription options
+
     options.forEach(option => {
       option.addEventListener('click', () => {
-        if (textContentWrapper) {
-         
-          // Change content to "Thanks!"
-          textContentWrapper.innerHTML = `<h2 style="text-align: center; padding: 4rem 0;">Thanks!</h2>`;
-
-          // Close modal after a short delay
-          setTimeout(() => {
-            closeModal();
-          }, 1000); // 1 second delay  
-
-
-        }
+        closeModal();
       });
     });
   });

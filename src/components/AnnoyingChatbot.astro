@@ -1,5 +1,4 @@
 ---
-// src/components/AnnoyingChatbot.astro
 ---
 <div id="annoying-chatbot-popup" class="chatbot-container">
   <div id="annoying-chatbot-content" class="chatbot-content">
@@ -9,19 +8,19 @@
 
 <template id="annoying-chatbot-step1">
   <button class="close-button" data-step="1">&times;</button>
-  <p class="chatbot-message">I'm pretty sure you want to ask a question.</p>
+  <p class="chatbot-message">Hi! How's your day going?</p>
   <div class="chatbot-options">
-    <button class="chatbot-button" data-step="1">No, I'm good</button>
-    <button class="chatbot-button" data-step="1">You're creeping me out</button>
+    <button class="chatbot-button" data-step="1">It just got better now that this chatbot is here.</button>
+    <button class="chatbot-button" data-step="1">Let's discuss in detail.</button>
   </div>
 </template>
 
 <template id="annoying-chatbot-step2">
   <button class="close-button" data-step="2">&times;</button>
-  <p class="chatbot-message">I'm sad that you don't want to chat.</p>
+  <p class="chatbot-message">Have I answered all of your questions today?</p>
   <div class="chatbot-options">
-    <button class="chatbot-button" data-step="2">Go away forever</button>
-    <button class="chatbot-button" data-step="2">Maybe later. It's been a long week and it might be nice to talk through it</button>
+    <button class="chatbot-button" data-step="2">Yes</button>
+    <button class="chatbot-button" data-step="2">Yes, but let's keep chatting.</button>
   </div>
 </template>
 
@@ -112,38 +111,36 @@
     const template2 = document.getElementById('annoying-chatbot-step2');
 
     if (!popup || !content || !template1 || !template2) return;
+
     const showFirstPopup = () => {
       content.innerHTML = '';
-      content.appendChild(template1.content.cloneNode(true));
+      const fragment = template1.content.cloneNode(true);
+      const buttons = fragment.querySelectorAll('[data-step="1"]');
+      buttons.forEach(button => button.addEventListener('click', () => {
+        dismiss();
+        document.dispatchEvent(new CustomEvent('chatbot-step1-closed'));
+      }, { once: true }));
+      content.appendChild(fragment);
       popup.classList.add('visible');
-      addEventListeners(1);
     };
 
     const showSecondPopup = () => {
       content.innerHTML = '';
-      content.appendChild(template2.content.cloneNode(true));
+      const fragment = template2.content.cloneNode(true);
+      const buttons = fragment.querySelectorAll('[data-step="2"]');
+      buttons.forEach(button => button.addEventListener('click', () => {
+        dismiss();
+        document.dispatchEvent(new CustomEvent('chatbot-closed'));
+      }, { once: true }));
+      content.appendChild(fragment);
       popup.classList.add('visible');
-      addEventListeners(2);
     };
 
     const dismiss = () => {
       popup.classList.remove('visible');
     };
 
-
-    const addEventListeners = (step) => {
-      const buttons = popup.querySelectorAll(`[data-step="${step}"]`);
-      if (step === 1) {
-        buttons.forEach(button => button.addEventListener('click', () => {
-          dismiss();
-          setTimeout(showSecondPopup, 30000); // 30 seconds later
-        }, { once: true }));
-      } else if (step === 2) {
-        buttons.forEach(button => button.addEventListener('click', dismiss, { once: true }));
-      }
-    };
-
-    // The first chatbot appears after 13s. This one appears 30s after that.
-    setTimeout(showFirstPopup, 13000 + 30000);
+    document.addEventListener('show-chatbot', showFirstPopup);
+    document.addEventListener('show-chatbot-step2', showSecondPopup);
   });
 </script>

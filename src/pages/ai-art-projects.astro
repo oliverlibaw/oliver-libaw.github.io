@@ -1,0 +1,122 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+
+// Add the filenames of your images from the 'public' folder here.
+const artImages = [
+    "/cozmos-wall.jpeg",
+    "/cozmos-installation.jpeg",
+    "/cozmos-poster.jpeg",
+    "/cozmos-sample-text-2.jpeg",
+    "/cozmos-sample-text.jpeg",
+    "/cozmos-artwork.jpeg"
+
+    // e.g., "/cozmos-detail.jpeg", "/cozmos-another.jpeg"
+];
+
+const artDescription = {
+    title: "AI-Powered Artwork at COZMOS Gallery in NYC",
+    paragraphs: [
+        "I'm pleased to have an AI art project on display at COZMOS Gallery on NYC's Lower East Side.",
+        "There's a lottttt of AI-generated art these days. This project tries to take a different tack: Instead of generating an image from a prompt, the AI invents the context for a (really uninteresting) real-world object.",
+        "The project uses a language model, a Raspberry Pi-powered display and a piece of silver duct tape.",
+        "The language model invented ~200 museum-style descriptions of a made-up artwork (the duct tape stuck to a wall) and those descriptions cycle through the Raspberry Pi display. The LLM's descriptions (IMO) are interesting, mostly fairly plausible (the Claude Monet one excepted), and kind of unsettling."
+    ]
+};
+---
+
+<Layout title="AI Art Projects" showPopups={false}>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+        }
+
+        main {
+            max-width: 90ch;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            padding-top: 12rem; /* Account for fixed header */
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 1rem;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            aspect-ratio: 4 / 3;
+            background-color: #111;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .slideshow-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slideshow-image.active {
+            opacity: 1;
+        }
+
+        .description-content h2 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .description-content p {
+            font-size: 1rem;
+            line-height: 1.7;
+            font-weight: 300;
+            opacity: 0.9;
+            margin: 0 0 1em;
+        }
+    </style>
+
+    <Header />
+
+    <main> 
+        <h1 class="page-title">AI Art Projects</h1>
+
+        <div class="slideshow-container">
+            {artImages.map((src, index) => (
+                <img src={src} alt={`AI art project image ${index + 1}`} class:list={["slideshow-image", { active: index === 0 }]} />
+            ))}
+        </div>
+
+        <div class="description-content">
+            <h2>{artDescription.title}</h2>
+            {artDescription.paragraphs.map(p => <p>{p}</p>)}
+        </div>
+    </main>
+
+    <script>
+        const images = document.querySelectorAll('.slideshow-image');
+        if (images.length > 1) {
+            let currentIndex = 0;
+            setInterval(() => {
+                images[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+            }, 4000); // Change image every 4 seconds
+        }
+    </script>
+</Layout>

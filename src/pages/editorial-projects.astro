@@ -1,6 +1,6 @@
 ---
-// src/pages/editorial-projects.astro
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
 
 const projects = [
   {
@@ -19,9 +19,72 @@ const projects = [
     body: "Today, billions of people are unable to easily access most of the information on the internet or connect with most of the online world in their native languages. Eliminating these language barriers would be profound, making it possible for people to access information online in their native or preferred languages.   Meta AI is announcing a long-term effort to build language and MT tools that will include most of the world’s languages. That means building AI models that can learn from languages with fewer examples to train from and designing new ways to translate speech in one language to another in real time."
   }
 ];
+
+const blogPosts = [
+  {
+    url: "https://ai.meta.com/blog/advancing-first-person-perception-with-2022-ego4d-challenge/",
+    title: "Advancing first-person perception with the 2022 Ego4D Challenge",
+    image: "/images/ego4d.png"
+  },
+  {
+    url: "https://ai.meta.com/blog/democratizing-access-to-large-scale-language-models-with-opt-175b/",
+    title: "Democratizing access to large-scale language models with OPT-175B",
+    image: "/images/opt-175b.png"
+  },
+  {
+    url: "https://ai.meta.com/blog/generative-ai-text-to-video/",
+    title: "Make-A-Video: An AI system that generates videos from text",
+    image: "/images/make_a_video.webp"
+  },
+  {
+    url: "https://ai.meta.com/blog/ai-rsc/",
+    title: "Introducing the AI Research SuperCluster — Meta’s cutting-edge AI supercomputer for AI research",
+    image: "/images/supercluster.jpg"
+  },
+  {
+    url: "https://ai.meta.com/blog/blenderbot-3-a-175b-parameter-publicly-available-chatbot-that-improves-its-skills-and-safety-over-time/",
+    title: "BlenderBot 3: A 175B-parameter, publicly available chatbot that improves its skills and safety over time",
+    image: "/images/blenderbot.png"
+  },
+  {
+    url: "https://ai.meta.com/blog/meta-ai-research-explores-new-public-fairness-benchmarks-for-computer-vision-models/",
+    title: "Meta AI Research explores new public fairness benchmarks for computer vision models",
+    image: "/images/fairness_flow.png"
+  },
+  {
+    url: "https://ai.meta.com/blog/hateful-memes-challenge-and-data-set/",
+    title: "The Hateful Memes Challenge: Detecting hate speech in multimodal memes",
+    image: "/images/hateful_memes.png"
+  },
+  {
+    url: "https://furiosa.ai/blog/tensor-contraction-processor-ai-chip-architecture",
+    title: "Tensor Contraction Processor: An AI Chip Architecture for Model Parallelism",
+    image: "/images/tcp.avif"
+  },
+  {
+    url: "https://furiosa.ai/blog/rngd-hot-chips-press-release",
+    title: "FuriosaAI Unveils Next-Gen AI Chip ‘Renegade’ at Hot Chips 2023",
+    image: "/images/rngd_die.avif"
+  },
+  {
+    url: "https://furiosa.ai/blog/rngd-preview-furiosa-ai",
+    title: "A Preview of Renegade, FuriosaAI’s Next-Generation AI Chip",
+    image: "/images/RNGD_preview.avif"
+  },
+  {
+    url: "https://furiosa.ai/blog/furiosaai-and-openai-showcase-the-future-of-sustainable-enterprise-ai",
+    title: "FuriosaAI and OpenAI Showcase the Future of Sustainable Enterprise AI",
+    image: "/images/openai.avif"
+  },
+  {
+    url: "https://furiosa.ai/blog/lg-ai-research-taps-furiosaai-to-achieve-2-25x-better-llm-inference-in-production-vs-gpus",
+    title: "LG AI Research Taps FuriosaAI to Achieve 2.25x Better LLM Inference in Production vs. GPUs",
+    image: "/images/LGFuriosa_server.avif"
+  }
+];
 ---
 
-<Layout title="Editorial Projects">
+<Layout title="Editorial Projects" showPopups={false}>
 	<style>
 		body {
 			background-color: #000;
@@ -30,32 +93,25 @@ const projects = [
 			margin: 0;
 		}
 
-		.page-header {
-			padding: 1rem 4rem;
-			background-color: rgba(0, 0, 0, 0.4);
-			text-align: left;
-		}
-
-		.page-header a {
-			color: white;
-			text-decoration: none;
-			font-size: 1rem;
-			transition: opacity 0.3s ease;
-		}
-
-		.page-header a:hover {
-			opacity: 0.7;
-		}
-
 		main {
 			max-width: 90ch;
 			margin: 0 auto;
 			padding: 4rem 2rem;
+			padding-top: 12rem; /* Account for fixed header */
 		}
 
 		.page-title {
 			font-size: 3rem;
 			margin-bottom: 4rem;
+			text-align: center;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+			padding-bottom: 1rem;
+		}
+
+		.section-title {
+			font-size: 2.5rem;
+			margin-top: 6rem;
+			margin-bottom: 3rem;
 			text-align: center;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 			padding-bottom: 1rem;
@@ -99,11 +155,54 @@ const projects = [
 			opacity: 0.9;
 			margin: 0;
 		}
+
+		.blog-posts-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 2.5rem;
+		}
+
+		.blog-post-item a {
+			display: flex;
+			flex-direction: column;
+			text-decoration: none;
+			color: white;
+			background-color: #1a1a1a;
+			border-radius: 8px;
+			overflow: hidden;
+			transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+			height: 100%;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.blog-post-item a:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+		}
+
+		.blog-post-image {
+			width: 100%;
+			height: 180px;
+			object-fit: cover;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.blog-post-text {
+			padding: 1.25rem;
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+		}
+
+		.blog-post-text h3 {
+			font-size: 1.1rem;
+			font-weight: 500;
+			margin: 0;
+			line-height: 1.5;
+		}
 	</style>
 
-	<header class="page-header">
-		<a href="/">&larr; Back to Home</a>
-	</header>
+	<Header />
 
 	<main>
 		<h1 class="page-title">Editorial Projects</h1>
@@ -123,6 +222,22 @@ const projects = [
 						<h2>{project.title}</h2>
 						<p>{project.body}</p>
 					</div>
+				</article>
+			))}
+		</div>
+
+		<h2 class="section-title">Blog Posts & Articles</h2>
+		<div class="blog-posts-grid">
+			{blogPosts.map(post => (
+				<article class="blog-post-item">
+					<a href={post.url} target="_blank" rel="noopener noreferrer">
+						<img
+							src={post.image}
+							alt={`Hero image for ${post.title}`}
+							class="blog-post-image"
+						/>
+						<div class="blog-post-text"><h3>{post.title}</h3></div>
+					</a>
 				</article>
 			))}
 		</div>

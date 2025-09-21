@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
 ---
 
-<Layout title="Oliver Libaw">
+<Layout title="Oliver Libaw's Personal Website" showPopups={true}>
 	<style>
 		body {
 			margin: 0;
@@ -10,7 +11,7 @@ import Layout from '../layouts/Layout.astro';
 				'Helvetica Neue', Arial, sans-serif;
 			background-color: #000;
 			color: white;
-			overflow-x: hidden; 
+			overflow-x: hidden;
 		}
 
 		.video-background {
@@ -45,82 +46,76 @@ import Layout from '../layouts/Layout.astro';
 		.hero {
 			height: 100vh;
 			position: relative;
-		}
-
-		.top-bar {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
 			display: flex;
-			justify-content: space-between;
+			justify-content: center;
 			align-items: center;
-			padding: 1rem 4rem;
-			transition: background-color 0.3s ease;
-			background-color: transparent;
-			z-index: 10;
-			box-sizing: border-box;
 		}
 
-		.top-bar.scrolled {
-			background-color: rgba(0, 0, 0, 0.4);
+		@keyframes flashy-colors {
+			0% { background-color: #ff4136; transform: scale(1); }
+			20% { background-color: #f012be; transform: scale(1.05); }
+			40% { background-color: #00ff00; transform: scale(1); }
+			60% { background-color: #ffff00; transform: scale(1.05); }
+			80% { background-color: #00ffff; transform: scale(1); }
+			100% { background-color: #ff4136; transform: scale(1.05); }
 		}
 
-		.top-left {
-			text-align: left;
+		@keyframes spin {
+			from {
+				transform: rotate(0deg);
+			}
+			to {
+				transform: rotate(360deg);
+			}
 		}
 
-		.top-right {
-			text-align: right;
-		}
-
-		h1 {
-			font-size: clamp(2.5rem, 8vw, 4rem);
-			margin: 0;
-			font-weight: 500;
-		}
-
-		.subtitle {
-			font-size: clamp(1.2rem, 4vw, 1.5rem);
-			margin: 0.5rem 0 1.5rem;
-			font-weight: 300;
-		}
-
-		.top-right a {
-			color: white;
-			text-decoration: none;
-			margin-left: 2rem;
-			font-size: clamp(1rem, 3vw, 1.2rem);
-			transition: opacity 0.3s ease;
-		}
-
-		.top-right a:hover {
-			opacity: 0.7;
-		}
-
-		.pullquote {
-			position: absolute;
-			padding: 4rem;
-			left: 0;
-			max-width: 37ch;
-			font-size: clamp(1.5rem, 2.5vw, 2rem);
-			line-height: 1.5;
-			text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-			font-family: Baskerville, "Goudy Old Style", "Palatino", "Book Antiqua", serif;
-			bottom: 20px;
-		}
-
-		.pullquote blockquote {
-			margin: 0;
-			font-style: italic;
-		}
-
-		.pullquote cite {
-			display: block;
-			font-style: normal;
+		.enshittify-button {
+			position: fixed;
+			top: 250px;
+			right: 10px;
+			z-index: 1000;
+			padding: 3rem 3.5rem;
 			font-size: 0.9rem;
-			margin-top: 0.5rem;
-			opacity: 0.8;
+			font-weight: bold;
+			color: black;
+			text-shadow: 1px 1px 2px white;
+			border: none;
+			cursor: pointer;
+			clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+			animation: flashy-colors 2s infinite linear;
+			text-align: center;
+			line-height: 1.2;
+		}
+
+		.enshittify-button:hover {
+			animation: flashy-colors 2s infinite linear, spin 1s infinite linear;
+		}
+
+		.de-enshittify-button {
+			position: fixed;
+			top: 250px;
+			right: 10px;
+			z-index: 1000;
+			width: 100px;
+			height: 100px;
+			padding: 0;
+			font-size: 0.8rem;
+			font-weight: bold;
+			color: black;
+			background-color: white;
+			border: none;
+			border-radius: 50%;
+			cursor: pointer;
+			transition: background-color 0.2s, transform 0.2s, color 0.2s;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+		}
+
+		.de-enshittify-button:hover {
+			background-color: #eee;
+			transform: scale(1.05);
 		}
 
 		.details-section {
@@ -199,33 +194,15 @@ import Layout from '../layouts/Layout.astro';
 				allowfullscreen
 				title="Background video of abstract shapes"></iframe>
 		</div>
-	<header class="top-bar">
-			<div class="top-left">
-				<h1>Oliver Libaw</h1>
-				<p class="subtitle">doer of several things</p>
-			</div>
-			<nav class="top-right">
-				<a
-					href="https://github.com/oliverlibaw"
-					target="_blank"
-					rel="noopener noreferrer">github</a
-				>
-				<a
-					href="https://www.linkedin.com/in/oliverlibaw/"
-					target="_blank"
-					rel="noopener noreferrer">linkedin</a
-				>
-				<a href="mailto:oliver@oliverlibaw.com">email</a>
-			</nav>
-		</header>
-		<div class="pullquote">
-			<blockquote>"If you need someone with great editorial leadership skills and hands-on experience building and training AI models, Oliver may be the person for you."</blockquote>
-			<cite>Me, talking about myself</cite>
+		<Header />
+		<div class="enshittify-container">
+			<button id="enshittify-button" class="enshittify-button">Enshittify<br>This Site!</button>
+			<button id="de-enshittify-button" class="de-enshittify-button" style="display: none;">De-enshittify</button>
 		</div>
 	</div>
 	<section class="details-section">
 		<div class="details-grid">
-			<div class="column">
+			<div class="column" id="content-box-1">
 				<img src="/furiosa_rngd_cards.avif" alt="FuriosaAI promotional cards" class="column-image" />
 				<h2>Global PR and Editorial at FuriosaAI</h2>
 				<p>In my current role as Global Lead for PR and Corporate Communications, I oversee global PR efforts, strategic messaging and thought leadership, and also lead content for major announcements. Reporting directly to the CEO of this 180-person startup, I am responsible for explaining Furiosa's technology to both expert and nonexpert audiences and showing why Furiosa is an exciting, important player in AI.</p>
@@ -263,29 +240,76 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		</div>
 	</section>
+</Layout>
 
-	<script>
-		document.addEventListener('scroll', () => {
-			const overlay = document.getElementById('video-overlay');
-if (overlay) {
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Scroll-based video overlay fade
+		const overlay = document.getElementById('video-overlay');
+		if (overlay) {
+			document.addEventListener('scroll', () => {
 				const heroHeight = window.innerHeight;
 				const scrollPosition = window.scrollY;
 				const fadeStart = heroHeight * 0.25;
 				const fadeEnd = heroHeight * 0.75;
 				const opacity = Math.max(0, Math.min(1, (scrollPosition - fadeStart) / (fadeEnd - fadeStart)));
 				overlay.style.opacity = opacity.toString();
-			}
+			});
+		}
 
-			// Top bar background
-			const topBar = document.querySelector('.top-bar');
-			if (topBar) {
-				if (window.scrollY > 10) {
-					topBar.classList.add('scrolled');
-				} else {
-					topBar.classList.remove('scrolled');
-				}
-			}			
+		// "Enshittify" button logic
+		const enshittifyButton = document.getElementById('enshittify-button');
+		const deEnshittifyButton = document.getElementById('de-enshittify-button');
+
+		if (enshittifyButton && deEnshittifyButton) {
+			enshittifyButton.addEventListener('click', () => {
+				document.dispatchEvent(new CustomEvent('show-gdpr'));
+				enshittifyButton.style.display = 'none';
+				deEnshittifyButton.style.display = 'block';
+			}, { once: true });
+
+			deEnshittifyButton.addEventListener('click', () => {
+				// The simplest and most robust way to reset the state is to just reload the page.
+				location.reload();
+			});
+		}
+
+
+		// Popup sequence listeners
+		document.addEventListener('gdpr-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-newsletter'));
 		});
-	</script>
-	
-</Layout>
+
+		document.addEventListener('newsletter-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-chatbot'));
+		});
+
+		document.addEventListener('chatbot-step1-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-follow-social'));
+		});
+
+		document.addEventListener('follow-social-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-chatbot-step2'));
+		});
+
+		document.addEventListener('chatbot-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-survey'));
+		});
+
+		document.addEventListener('survey-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-spin-wheel'));
+		});
+
+		document.addEventListener('spin-wheel-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-download-app'));
+		});
+
+		document.addEventListener('download-app-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-qr-code'));
+		});
+
+		document.addEventListener('qr-code-closed', () => {
+			document.dispatchEvent(new CustomEvent('show-gdpr'));
+		});
+	});
+</script>

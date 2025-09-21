@@ -1,0 +1,147 @@
+---
+const ratingScale = Array.from({ length: 10 }, (_, i) => i + 1);
+---
+<style>
+    .survey-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .survey-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .survey-popup {
+        background-color: #222;
+        color: #eee;
+        padding: 2rem;
+        border-radius: 10px;
+        max-width: 600px;
+        width: 90%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        position: relative;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .survey-popup legend {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-weight: 500;
+        padding: 0;
+        width: 100%;
+    }
+
+    .rating-scale {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .rating-scale div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.85rem;
+        color: #bbb;
+    }
+
+    .rating-scale input[type="radio"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #555;
+        border-radius: 50%;
+        margin-bottom: 8px;
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .rating-scale input[type="radio"]:checked {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .rating-scale input[type="radio"]:hover:not(:checked) {
+        border-color: #888;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #aaa;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+    .close-button:hover {
+        color: #fff;
+    }
+</style>
+
+<div class="survey-overlay" id="survey-popup-overlay">
+    <div class="survey-popup">
+        <button class="close-button" id="close-survey-popup">&times;</button>
+        <form>
+            <fieldset>
+                <legend>How likely are you to take this survey?<br>(1: very unlikely. 10: very likely)</legend>
+                <div class="rating-scale">
+                    {ratingScale.map(rating => (
+                        <div>
+                            <input type="radio" id={`q1-r${rating}`} name="q1" value={rating} />
+                            <label for={`q1-r${rating}`}>{rating}</label>
+                        </div>
+                    ))}
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.getElementById('survey-popup-overlay');
+        const surveyPopup = document.querySelector('.survey-popup');
+        const closeButton = document.getElementById('close-survey-popup');
+
+        if (!overlay || !closeButton) return;
+
+        const showPopup = () => {
+            overlay.classList.add('active');
+        };
+
+        const closePopup = () => {
+            overlay.classList.remove('active');
+            document.dispatchEvent(new CustomEvent('survey-closed'));
+        };
+
+        document.addEventListener('show-survey', showPopup);
+        closeButton.addEventListener('click', closePopup);
+        overlay.addEventListener('click', (event) => {
+            if (event.target === overlay) {
+                closePopup();
+            }
+        });
+
+        surveyPopup?.addEventListener('click', closePopup);
+    });
+</script>
