@@ -112,10 +112,19 @@ const { title, showPopups = false } = Astro.props;
 				setup: (el, handler) => {
 					const video = el.querySelector('video');
 					if (video) {
-						// Once video ends, automatically close the popup.
+						// The primary, successful path: the video plays and ends.
 						video.addEventListener('ended', handler, { once: true });
+
+						// A fallback path: if the video fails to load or play,
+						// allow the user to click the popup to close it and continue.
+						video.addEventListener('error', () => {
+							console.error("Spinner video failed to load. Falling back to click-to-close.");
+							// Clean up the 'ended' listener to prevent it from firing later.
+							video.removeEventListener('ended', handler);
+							el.addEventListener('click', handler, { once: true });
+						}, { once: true });
 					} else {
-						// Fallback: if no video, allow closing immediately.
+						// A fallback if the video element itself is missing.
 						el.addEventListener('click', handler, { once: true });
 					}
 				},
