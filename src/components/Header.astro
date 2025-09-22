@@ -1,4 +1,10 @@
 ---
+export interface Props {
+    /** For content pages, start with a background to ensure readability. */
+    pageHasSolidBackground?: boolean;
+}
+
+const { pageHasSolidBackground = false } = Astro.props;
 ---
 <style>
     .top-bar {
@@ -15,8 +21,8 @@
         z-index: 10;
         box-sizing: border-box;
     }
-
-    .top-bar.scrolled {
+    /* The .scrolled class is added on scroll. For content pages, we might want this from the start. */
+    .top-bar.scrolled, .top-bar.solid-background {
         background-color: rgba(0, 0, 0, 0.4);
     }
 
@@ -74,7 +80,7 @@
     }
 </style>
 
-<header class="top-bar">
+<header class:list={["top-bar", { "solid-background": pageHasSolidBackground }]}>
     <div class="top-left">
         <a href="/">
             <h1>Oliver Libaw</h1>
@@ -95,6 +101,8 @@
             rel="noopener noreferrer">LinkedIn</a
         >
         <a href="mailto:oliver@oliverlibaw.com">Email</a>
+        <a href="/enshittification">Enshittification?</a>
+
     </nav>
 </header>
 

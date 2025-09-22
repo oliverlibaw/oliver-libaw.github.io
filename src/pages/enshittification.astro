@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+// Note: I'm assuming you have a Header component for your site's navigation.
+// If it's located elsewhere or named differently, please adjust the import path.
+import Header from '../components/Header.astro';
+---
+
+<Layout title="What’s up with the ‘enshittification’ stuff?" showPopups={true}>
+	<Header />
+	<main class="content-wrapper">
+		<h1>What’s up with the “enshittification” stuff?</h1>
+		<p>
+			“Enshittification” is a term coined by the writer Cory Doctorow in his
+			essay.
+		</p>
+		<p>
+			The basic idea is that websites prioritize growth at first, so they
+			prioritize their users' needs and interests. Then websites look to
+			monetize their traffic by deprioritizing users and instead catering to
+			advertisers. Then they try to boost profits by squeezing their
+			advertisers, further worsening the quality of the site.
+		</p>
+		<p>
+			It's a great essay and you should read it. This site is just my doofy
+			riff on Doctorow's idea.
+		</p>
+		<p>Learn more:</p>
+		<ul>
+			<li>
+				<a href="https://en.wikipedia.org/wiki/Enshittification" target="_blank" rel="noopener noreferrer">Enshittification on Wikipedia</a>
+			</li>
+			<li>
+				<a href="https://pluralistic.net/2022/11/28/enshittification/" target="_blank" rel="noopener noreferrer">Cory Doctorow's original article</a>
+			</li>
+		</ul>
+		<div class="button-container">
+			<button id="enshittify-button" class="action-button">Enshittify this page</button>
+			<button id="de-enshittify-button" class="action-button secondary">De-enshittify</button>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	/* Applying styles from editorial-projects.astro for a consistent dark theme */
+	:global(body) {
+		background-color: #000;
+		color: #fff;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		margin: 0;
+	}
+
+	.content-wrapper {
+		/* Using a standard width for long-form text readability */
+		max-width: 75ch;
+		margin: 0 auto;
+		padding: 4rem 2rem;
+		padding-top: 12rem; /* Account for fixed header on desktop */
+	}
+
+	h1 {
+		font-size: 3rem;
+		font-weight: 500;
+		margin-bottom: 2rem;
+	}
+
+	p {
+		font-size: 1.1rem;
+		line-height: 1.7;
+		font-weight: 300;
+		opacity: 0.9;
+	}
+
+	a {
+		color: #87ceeb; /* A readable sky blue for links on a dark background */
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+	.button-container {
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.2);
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.action-button {
+		background-color: #87ceeb;
+		color: #000;
+		border: none;
+		padding: 1rem 2rem;
+		font-size: 1.1rem;
+		font-weight: 500;
+		border-radius: 5px;
+		cursor: pointer;
+		transition: background-color 0.3s ease, transform 0.2s ease;
+	}
+
+	.action-button:hover {
+		background-color: #a7dde9;
+		transform: translateY(-2px);
+	}
+
+	.action-button.secondary {
+		background-color: #555;
+		color: #fff;
+	}
+
+	.action-button.secondary:hover {
+		background-color: #777;
+	}
+
+	@media (max-width: 768px) {
+		.content-wrapper {
+			padding: 2rem 1rem;
+			/* The header becomes taller on mobile, so we need more top padding to prevent overlap. */
+			padding-top: 15rem;
+		}
+	}
+</style>
+
+<script>
+	document.getElementById('de-enshittify-button')?.addEventListener('click', () => {
+		window.location.reload();
+	});
+</script>
